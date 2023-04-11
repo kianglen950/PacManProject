@@ -11,6 +11,7 @@ namespace FroggerProject
 {
     internal class player
     {
+        //declare all variables
         public int x, y, width, height;
         public int speed = 5;
         public int size = 20;
@@ -24,7 +25,7 @@ namespace FroggerProject
            
 
         }
-        public void Move()
+        public void Move() //move method
         {
             if (direction == "up")
             {
@@ -46,7 +47,7 @@ namespace FroggerProject
 
        
 
-        public bool Collision(wall walls)
+        public bool Collision(wall walls) //collision with walls, using bool
         {
             Rectangle playerRec = new Rectangle(x, y, size, size);
             Rectangle wallRec = new Rectangle(walls.x, walls.y, walls.width, walls.height);
@@ -64,7 +65,7 @@ namespace FroggerProject
             }
 
         }
-            public bool Collision(Pellets pellet)
+            public bool Collision(Pellets pellet) //collision with pellets, bool
             {
                 Rectangle playerRec = new Rectangle(x, y, size, size);
                 Rectangle pelletRec = new Rectangle(pellet.x, pellet.y, pellet.width, pellet.height);
@@ -78,7 +79,7 @@ namespace FroggerProject
                 return false;
             }
             }
-        public bool Collision(Ghost ghost)
+        public bool Collision(Ghost ghost) //collision with ghosts, bool
         {
             Rectangle playerRec = new Rectangle(x, y, size, size);
             Rectangle ghostRec = new Rectangle(ghost.x, ghost.y, ghost.size, ghost.size);
@@ -93,7 +94,7 @@ namespace FroggerProject
             }
         }
 
-        public bool Collision(PowerPellet powerpellet)
+        public bool Collision(PowerPellet powerpellet) //collision with power pellets, bool
         {
             Rectangle playerRec = new Rectangle(x, y, size, size);
             Rectangle powerpelletRec = new Rectangle(powerpellet.x, powerpellet.y, powerpellet.width, powerpellet.height);

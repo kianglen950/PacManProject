@@ -8,7 +8,7 @@ namespace FroggerProject
 {
     internal class PowerPellet
     {
-
+       
         public int x, y, width, height;
         public int size = 10;
         public PowerPellet(int _x, int _y)

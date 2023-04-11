@@ -16,5 +16,15 @@ namespace FroggerProject
         {
             InitializeComponent();
         }
+
+        private void playAgainButton_Click(object sender, EventArgs e)
+        {
+            Form1.ChangeScreen(this, new MenuScreen()); //go to menu screen
+        }
+
+        private void exitButton3_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }

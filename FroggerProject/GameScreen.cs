@@ -1,5 +1,5 @@
-﻿//Kian Glenfield - 2D Game project (Pac-Man)
-//Using multiple screens and classes
+﻿//Kian Kian Glenfield - 2D Game project (Pac-Man)
+//Using using multiple screens and classes
 
 using System;
 using System.Collections.Generic;
@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Forms;
+using System.Media;
 
 namespace FroggerProject
 {
@@ -18,18 +19,26 @@ namespace FroggerProject
     {
         int points;        //integers for points and lives, how many to win or lose
         int lives = 5;
+
         Ghost ghost; //make player and ghost class useable on game screen
         player hero;
-        Boolean aDown, dDown, wDown, sDown, upDown, downDown, leftDown, rightDown;
+
+        Boolean aDown, dDown, wDown, sDown, upDown, downDown, leftDown, rightDown; //movement
         Boolean powered;
-        //movement
+        
+        
         SolidBrush yellowBrush = new SolidBrush(Color.Yellow); //different brushes to paint each object
         SolidBrush blueBrush = new SolidBrush(Color.DarkBlue);
         SolidBrush whiteBrush = new SolidBrush(Color.White);
         SolidBrush redBrush = new SolidBrush(Color.Red);
+        
         List<wall> walls = new List<wall>(); //list for all walls
         List<Pellets> pellets = new List<Pellets>(); //list for all pellets
         List<PowerPellet> powerPellet = new List<PowerPellet>(); //list for power pellets
+
+        SoundPlayer moveSound = new SoundPlayer(Properties.Resources.pacman_chomp); //different soundplayers for each sound
+        SoundPlayer deathSound = new SoundPlayer(Properties.Resources.pacman_death);
+        SoundPlayer ghostEatSound = new SoundPlayer(Properties.Resources.pacman_eatghost);
         public GameScreen()
         {
             InitializeComponent();
@@ -47,6 +56,7 @@ namespace FroggerProject
             Walls();
             spawnPellets();
             spawnPowerPellets();
+            moveSound.PlayLooping(); //start the sound in a loop
         }
 
         public void Walls() //method for the walls, draws each and adds to the list
@@ -818,7 +828,7 @@ namespace FroggerProject
 
         }
 
-        public void spawnPowerPellets()
+        public void spawnPowerPellets() //method for spawning power pellets, draws them then add to the list
         {
             PowerPellet newPowerPellet = new PowerPellet(570, 410);
             powerPellet.Add(newPowerPellet);
@@ -834,7 +844,7 @@ namespace FroggerProject
         }
 
 
-        private void gameEngine_Tick(object sender, EventArgs e)
+        private async void gameEngine_Tick(object sender, EventArgs e)
         {
             hero.prevX = hero.x; //collision
             hero.prevY = hero.y;
@@ -912,9 +922,12 @@ namespace FroggerProject
             {
                 if (powered == true)
                 {
+                    ghostEatSound.Play(); //play ghosteat sound
                     ghost.x = 317;
                     ghost.y = 280;
                     powered = false;
+                    await Task.Delay(1000); //delay to wait full ghosteat sound
+                    moveSound.PlayLooping(); //start the move again in a loop
                 }
                 else if (powered == false)
                 {
@@ -950,7 +963,7 @@ namespace FroggerProject
             {
                 hero.x = 25;
             }
-            if(ghost.x <= 10)
+            if(ghost.x <= 10) //teleportation for ghost
             {
                 ghost.x = 575;
             }
@@ -966,6 +979,8 @@ namespace FroggerProject
             }
             if (lives == 0) //lose method called if all lives are lost
             {
+                moveSound.Stop();
+                deathSound.Play(); //play death sound
                 gameEngine.Stop();
                 GameOver();
             }
@@ -973,33 +988,33 @@ namespace FroggerProject
 
         }
 
-        private async void PoweredTimer()
+        private async void PoweredTimer() //method for how long the powered phase lasts
         {
            await Task.Delay(10000);
            powered = false;
         }
-        private async void RespawnPowPellet(PowerPellet powPellet)
+        private async void RespawnPowPellet(PowerPellet powPellet) //respawn the pellets after being taken, teleporting them off screen rather than deleting them
         {
             int tempX, tempY;
             tempX = powPellet.x;
             tempY = powPellet.y;
             powPellet.x = 600;
             powPellet.y = 600;
-            await Task.Delay(25000);
+            await Task.Delay(45000);
             powPellet.x = tempX;
             powPellet.y = tempY;
         }
         private void GameScreen_Paint(object sender, PaintEventArgs e) //paint method
         {
-            if(powered == true)
+            if(powered == true) //change colour when power pellet grabbed
             {
                 e.Graphics.FillRectangle(blueBrush, ghost.x, ghost.y, ghost.size, ghost.size);
             }
             else
             {
-            e.Graphics.FillRectangle(redBrush, ghost.x, ghost.y, ghost.size, ghost.size);
+            e.Graphics.FillRectangle(redBrush, ghost.x, ghost.y, ghost.size, ghost.size); //draw ghost
             }
-            e.Graphics.FillEllipse(yellowBrush, hero.x, hero.y, hero.size, hero.size);
+            e.Graphics.FillEllipse(yellowBrush, hero.x, hero.y, hero.size, hero.size); //draw hero
 
             foreach (wall w in walls) //foreach loop to paint each wall
             {
@@ -1009,7 +1024,7 @@ namespace FroggerProject
             {
                 e.Graphics.FillRectangle(whiteBrush, p.x, p.y, p.size, p.size);
             }
-            foreach (PowerPellet po in powerPellet)
+            foreach (PowerPellet po in powerPellet) //foreach loop to pain each power pellet
             {
                 e.Graphics.FillRectangle(yellowBrush, po.x, po.y, po.size, po.size);
             }
