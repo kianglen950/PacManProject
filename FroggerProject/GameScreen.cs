@@ -972,7 +972,7 @@ namespace FroggerProject
                 ghost.x = 25;
             }
 
-            if (points == 199) //win method called if all pellets are collected
+            if (points == 199) //win method called if all pellets are collected 
             {
                 gameEngine.Stop();
                 winGame();
