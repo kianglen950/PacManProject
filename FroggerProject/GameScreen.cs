@@ -25,13 +25,13 @@ namespace FroggerProject
 
         Boolean aDown, dDown, wDown, sDown, upDown, downDown, leftDown, rightDown; //movement
         Boolean powered;
-        
-        
+
+
         SolidBrush yellowBrush = new SolidBrush(Color.Yellow); //different brushes to paint each object
         SolidBrush blueBrush = new SolidBrush(Color.DarkBlue);
         SolidBrush whiteBrush = new SolidBrush(Color.White);
         SolidBrush redBrush = new SolidBrush(Color.Red);
-        
+
         List<wall> walls = new List<wall>(); //list for all walls
         List<Pellets> pellets = new List<Pellets>(); //list for all pellets
         List<PowerPellet> powerPellet = new List<PowerPellet>(); //list for power pellets
@@ -963,11 +963,11 @@ namespace FroggerProject
             {
                 hero.x = 25;
             }
-            if(ghost.x <= 10) //teleportation for ghost
+            if (ghost.x <= 10) //teleportation for ghost
             {
                 ghost.x = 575;
             }
-            else if(ghost.x >= 600)
+            else if (ghost.x >= 600)
             {
                 ghost.x = 25;
             }
@@ -990,8 +990,8 @@ namespace FroggerProject
 
         private async void PoweredTimer() //method for how long the powered phase lasts
         {
-           await Task.Delay(10000);
-           powered = false;
+            await Task.Delay(10000);
+            powered = false;
         }
         private async void RespawnPowPellet(PowerPellet powPellet) //respawn the pellets after being taken, teleporting them off screen rather than deleting them
         {
@@ -1006,13 +1006,13 @@ namespace FroggerProject
         }
         private void GameScreen_Paint(object sender, PaintEventArgs e) //paint method
         {
-            if(powered == true) //change colour when power pellet grabbed
+            if (powered == true) //change colour when power pellet grabbed
             {
                 e.Graphics.FillRectangle(blueBrush, ghost.x, ghost.y, ghost.size, ghost.size);
             }
             else
             {
-            e.Graphics.FillRectangle(redBrush, ghost.x, ghost.y, ghost.size, ghost.size); //draw ghost
+                e.Graphics.FillRectangle(redBrush, ghost.x, ghost.y, ghost.size, ghost.size); //draw ghost
             }
             e.Graphics.FillEllipse(yellowBrush, hero.x, hero.y, hero.size, hero.size); //draw hero
 
